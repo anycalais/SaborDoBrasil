@@ -163,7 +163,7 @@
         usuarioLogado = usuario;
         const modal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
         modal.hide();
-        document.getElementById('imagemPerfil').src = 'img/icones/user_padrao.png';
+        document.getElementById('imagemPerfil').src = 'img/foto_usuario/usuario_01.jpg';
         document.getElementById('nomeUsuario').textContent = usuario;
         alert("Login realizado com sucesso!");
       }
@@ -195,7 +195,7 @@
           }
           likeEl.textContent++;
           totalLikes.textContent++;
-          likeIcon.src = 'img/icones/like_cheio.svg';
+          likeIcon.src = 'img/icones/like_cheia.svg';
           interacao[id] = 'like';
         }
       } else {
