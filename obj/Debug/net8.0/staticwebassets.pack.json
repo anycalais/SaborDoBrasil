@@ -77,6 +77,14 @@
       "PackagePath": "staticwebassets\\img\\icones\\chat.svg"
     },
     {
+      "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\img\\icones\\deslike_cheia.svg",
+      "PackagePath": "staticwebassets\\img\\icones\\deslike_cheia.svg"
+    },
+    {
+      "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\img\\icones\\deslike_vazia.svg",
+      "PackagePath": "staticwebassets\\img\\icones\\deslike_vazia.svg"
+    },
+    {
       "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\img\\icones\\flecha_baixo_cheia.svg",
       "PackagePath": "staticwebassets\\img\\icones\\flecha_baixo_cheia.svg"
     },
@@ -97,8 +105,12 @@
       "PackagePath": "staticwebassets\\img\\icones\\lapis_editar.svg"
     },
     {
-      "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\img\\icones\\like.svg",
-      "PackagePath": "staticwebassets\\img\\icones\\like.svg"
+      "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\img\\icones\\like_cheia.svg",
+      "PackagePath": "staticwebassets\\img\\icones\\like_cheia.svg"
+    },
+    {
+      "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\img\\icones\\like_vazia.svg",
+      "PackagePath": "staticwebassets\\img\\icones\\like_vazia.svg"
     },
     {
       "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\img\\icones\\lixeira_deletar.svg",

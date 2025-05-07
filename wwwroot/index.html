@@ -1,123 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sabor do Brasil - SPA</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sabor do Brasil</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body { background-color: #f8f9fa; }
     .linha-laranja { height: 4px; background-color: #D97014; margin: 10px 0; }
-    .border-custom { border: 1px solid #C2BEBE; padding: 15px; background-color: #fff; }
-    .footer-custom { background-color: #D97014; color: #fff; padding: 15px; text-align: center; }
-    .btn-login { background-color: #D97014; color: #fff; font-weight: bold; border: none; padding: 10px 20px; }
-    .icon { width: 20px; height: 20px; cursor: pointer; }
-    .comentario-input { width: 100%; margin-top: 10px; }
-    .header-title { color: #000; text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 1.5rem; }
-    .card-title { font-weight: bold; font-size: 1.2rem; }
     .perfil-img { border-radius: 50%; width: 80px; height: 80px; object-fit: cover; }
+    .btn-login, .btn-comentar, .btn-atualizar { background-color: #D97014; color: white; font-weight: bold; border: none; }
+    .btn-comentar:disabled, .btn-atualizar:disabled { opacity: 0.6; cursor: not-allowed; }
+    .icon { width: 20px; cursor: pointer; }
+    .footer-custom {
+      background-color: #D97014;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+    .comentario-usuario {
+      position: relative;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .comentario-usuario .acoes {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+    }
+    .comentario-usuario .acoes img {
+      margin-left: 5px;
+    }
   </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-  <div class="container-fluid flex-grow-1">
+  <div class="container-fluid">
     <div class="row">
-      <!-- Coluna 1 - Perfil -->
-      <div class="col-md-3 p-3 border-end text-center">
+      <div class="col-md-3 p-3 text-center border-end">
         <img id="imagemPerfil" src="img/logo/logo_sabor_do_brasil.png" alt="Logo" class="perfil-img">
         <h5 id="nomeUsuario" class="mt-3">Sabor do Brasil</h5>
         <div class="linha-laranja"></div>
-        <p><strong id="totalLikes">10</strong> Quantidade Likes</p>
-        <p><strong id="totalDislikes">3</strong> Quantidade Dislikes</p>
-      </div>
-
-      <!-- Coluna 2 - Main -->
-      <div class="col-md-6 border-custom">
-        <h2 class="header-title">Publicações</h2>
-
-        <!-- Publicação 01 -->
-        <div class="card mb-4">
-          <img src="img/publicacao/publicacao01.png" class="card-img-top" style="height: 200px; object-fit: cover;">
-          <div class="card-body">
-            <h5 class="card-title">Feijoada Tradicional</h5>
-            <p class="card-text text-muted d-flex justify-content-between">
-              <span>Restaurante X</span><span>Salvador-BA</span>
-            </p>
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <img id="likeIcon1" src="img/icones/like_vazia.svg" class="icon" onclick="interagir('like', 1)">
-              <span id="likeCount1">2</span>
-              <img id="dislikeIcon1" src="img/icones/deslike_vazia.svg" class="icon" onclick="interagir('dislike', 1)">
-              <span id="dislikeCount1">1</span>
-              <img src="img/icones/chat.svg" class="icon">
-              <span id="commentCount1">4</span>
-            </div>
-            <div id="comentarios1" class="mb-2">
-              <p><strong>usuario_01:</strong> Muito saboroso!</p>
-              <p><strong>usuario_02:</strong> Amo demais!</p>
-              <p><strong>usuario_03:</strong> Receita incrível.</p>
-            </div>
-            <input type="text" id="comentarioInput1" class="form-control comentario-input" placeholder="Digite seu comentário">
-            <button class="btn btn-sm btn-primary mt-2" onclick="comentar(1)">Comentar</button>
-          </div>
-        </div>
-
-        <!-- Publicação 02 -->
-        <div class="card mb-4">
-          <img src="img/publicacao/publicacao02.png" class="card-img-top" style="height: 200px; object-fit: cover;">
-          <div class="card-body">
-            <h5 class="card-title">Acarajé Baiano</h5>
-            <p class="card-text text-muted d-flex justify-content-between">
-              <span>Banca da Dinha</span><span>Salvador-BA</span>
-            </p>
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <img id="likeIcon2" src="img/icones/like_vazia.svg" class="icon" onclick="interagir('like', 2)">
-              <span id="likeCount2">5</span>
-              <img id="dislikeIcon2" src="img/icones/deslike_vazia.svg" class="icon" onclick="interagir('dislike', 2)">
-              <span id="dislikeCount2">0</span>
-              <img src="img/icones/chat.svg" class="icon">
-              <span id="commentCount2">3</span>
-            </div>
-            <div id="comentarios2" class="mb-2">
-              <p><strong>usuario_01:</strong> Crocante e delicioso.</p>
-              <p><strong>usuario_04:</strong> Perfeito com pimenta!</p>
-            </div>
-            <input type="text" id="comentarioInput2" class="form-control comentario-input" placeholder="Digite seu comentário">
-            <button class="btn btn-sm btn-primary mt-2" onclick="comentar(2)">Comentar</button>
-          </div>
-        </div>
-
-        <!-- Publicação 03 -->
-        <div class="card mb-4">
-          <img src="img/publicacao/publicacao03.png" class="card-img-top" style="height: 200px; object-fit: cover;">
-          <div class="card-body">
-            <h5 class="card-title">Tapioca Nordestina</h5>
-            <p class="card-text text-muted d-flex justify-content-between">
-              <span>Feirinha Central</span><span>Recife-PE</span>
-            </p>
-            <div class="d-flex align-items-center gap-3 mb-3">
-              <img id="likeIcon3" src="img/icones/like_vazia.svg" class="icon" onclick="interagir('like', 3)">
-              <span id="likeCount3">3</span>
-              <img id="dislikeIcon3" src="img/icones/deslike_vazia.svg" class="icon" onclick="interagir('dislike', 3)">
-              <span id="dislikeCount3">2</span>
-              <img src="img/icones/chat.svg" class="icon">
-              <span id="commentCount3">2</span>
-            </div>
-            <div id="comentarios3" class="mb-2">
-              <p><strong>usuario_05:</strong> Combinação de queijo e coco é demais!</p>
-            </div>
-            <input type="text" id="comentarioInput3" class="form-control comentario-input" placeholder="Digite seu comentário">
-            <button class="btn btn-sm btn-primary mt-2" onclick="comentar(3)">Comentar</button>
-          </div>
+        <div class="d-flex justify-content-center mt-3 gap-4">
+          <div><strong id="totalLikes">2</strong><br><small>Likes</small></div>
+          <div><strong id="totalDislikes">1</strong><br><small>Deslikes</small></div>
         </div>
       </div>
 
-      <!-- Coluna 3 - Login -->
-      <div class="col-md-3 p-3 d-flex justify-content-center align-items-start">
+      <div class="col-md-6 p-3">
+        <h4 class="text-center fw-bold">Publicações</h4>
+        <div id="publicacoes"></div>
+      </div>
+
+      <div class="col-md-3 p-3 text-center">
         <button class="btn btn-login" onclick="mostrarLogin()">Entrar</button>
       </div>
     </div>
   </div>
 
-  <!-- Rodapé -->
   <footer class="footer-custom mt-auto">
     Sabor do Brasil
     <img src="img/icones/Instagram.svg" class="icon mx-1">
@@ -127,51 +68,92 @@
     Copyright - 2024
   </footer>
 
-  <!-- Modal Login -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Login</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body">
-          <input type="text" id="usuarioInput" class="form-control mb-2" placeholder="Usuário">
-          <input type="password" id="senhaInput" class="form-control mb-3" placeholder="Senha">
-          <button class="btn btn-primary w-100" onclick="logarUsuario()">Entrar</button>
-        </div>
+    <div class="modal-dialog"><div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
-    </div>
+      <div class="modal-body">
+        <input type="text" id="usuarioInput" class="form-control mb-2" placeholder="Usuário">
+        <input type="password" id="senhaInput" class="form-control mb-3" placeholder="Senha">
+        <button class="btn btn-primary w-100" onclick="logarUsuario()">Entrar</button>
+      </div>
+    </div></div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     let logado = false;
-    let usuarioLogado = '';
+    let usuarioLogado = "";
     let interacao = {};
 
+    const publicacoes = [
+      { id: 1, titulo: "Título do prato 01", imagem: "img/publicacao/publicacao01.png", local: "Local 01", cidade: "Maceió-AL", likes: 2, dislikes: 1, comentarios: [ { usuario: "usuario_01", texto: "Muito saboroso!" } ] },
+      { id: 2, titulo: "Título do prato 02", imagem: "img/publicacao/publicacao02.png", local: "Local 02", cidade: "Maceió-AL", likes: 1, dislikes: 0, comentarios: [ { usuario: "usuario_02", texto: "Delícia!" } ] },
+      { id: 3, titulo: "Título do prato 03", imagem: "img/publicacao/publicacao03.png", local: "Local 03", cidade: "Maceió-AL", likes: 2, dislikes: 1, comentarios: [ { usuario: "usuario_03", texto: "Uma explosão de sabor!" } ] }
+    ];
+
     function mostrarLogin() {
-      const modal = new bootstrap.Modal(document.getElementById('loginModal'));
+      const modal = new bootstrap.Modal(document.getElementById("loginModal"));
       modal.show();
     }
 
     function logarUsuario() {
-      const usuario = document.getElementById('usuarioInput').value;
-      const senha = document.getElementById('senhaInput').value;
+      const usuario = document.getElementById("usuarioInput").value;
+      const senha = document.getElementById("senhaInput").value;
       if (usuario && senha) {
         logado = true;
         usuarioLogado = usuario;
-        const modal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+        const modal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
         modal.hide();
-        document.getElementById('imagemPerfil').src = 'img/foto_usuario/usuario_01.jpg';
-        document.getElementById('nomeUsuario').textContent = usuario;
+        document.getElementById("imagemPerfil").src = "img/foto_usuario/usuario_01.jpg";
+        document.getElementById("nomeUsuario").textContent = usuario;
         alert("Login realizado com sucesso!");
       }
     }
 
+    function renderizarPublicacoes() {
+      const container = document.getElementById("publicacoes");
+      container.innerHTML = "";
+      publicacoes.forEach(pub => {
+        const div = document.createElement("div");
+        div.className = "card mb-3";
+        div.innerHTML = `
+          <div class="card-body p-2">
+            <h5 class="fw-bold">${pub.titulo}</h5>
+            <img src="${pub.imagem}" class="card-img-top mb-2" onclick="abrirComentarios(${pub.id})">
+            <p class="mb-1 d-flex justify-content-between">
+              <span>${pub.local}</span><span>${pub.cidade}</span>
+            </p>
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <img id="likeIcon${pub.id}" src="img/icones/like_vazia.svg" class="icon" onclick="interagir('like', ${pub.id})">
+              <span id="likeCount${pub.id}">${pub.likes}</span>
+              <img id="dislikeIcon${pub.id}" src="img/icones/deslike_vazia.svg" class="icon" onclick="interagir('dislike', ${pub.id})">
+              <span id="dislikeCount${pub.id}">${pub.dislikes}</span>
+              <img src="img/icones/chat.svg" class="icon" onclick="abrirComentarios(${pub.id})">
+              <span id="commentCount${pub.id}">${pub.comentarios.length}</span>
+            </div>
+            <div id="comentarios${pub.id}" style="display:none">
+              ${pub.comentarios.map((c, i) => `
+                <div class="comentario-usuario">
+                  <strong>${c.usuario}:</strong> <span id="comentarioTexto${pub.id}_${i}">${c.texto}</span>
+                  ${c.usuario === usuarioLogado ? `
+                  <div class="acoes">
+                    <img src="img/icones/lapis_editar.svg" class="icon" style="color:white" onclick="editarComentario(${pub.id}, ${i})">
+                    <img src="img/icones/lixeira_deletar.svg" class="icon" style="color:red" onclick="excluirComentario(${pub.id}, ${i})">
+                  </div>` : ""}
+                </div>`).join('')}
+              <textarea class="form-control mb-2" id="comentarioInput${pub.id}" oninput="habilitarBotao(${pub.id})" placeholder="Digite seu comentário"></textarea>
+              <button class="btn btn-sm btn-comentar" id="btnComentar${pub.id}" onclick="comentar(${pub.id})" disabled>Comentar</button>
+            </div>
+          </div>`;
+        container.appendChild(div);
+      });
+    }
+
     function interagir(tipo, id) {
       if (!logado) return mostrarLogin();
-
       const likeEl = document.getElementById(`likeCount${id}`);
       const dislikeEl = document.getElementById(`dislikeCount${id}`);
       const likeIcon = document.getElementById(`likeIcon${id}`);
@@ -218,18 +200,48 @@
       }
     }
 
-    function comentar(id) {
+    function abrirComentarios(id) {
       if (!logado) return mostrarLogin();
+      const secao = document.getElementById(`comentarios${id}`);
+      secao.style.display = secao.style.display === "none" ? "block" : "none";
+    }
 
+    function habilitarBotao(id) {
       const input = document.getElementById(`comentarioInput${id}`);
-      const comentario = input.value.trim();
-      if (comentario !== '') {
-        const comentariosDiv = document.getElementById(`comentarios${id}`);
-        comentariosDiv.innerHTML += `<p><strong>${usuarioLogado}:</strong> ${comentario}</p>`;
-        document.getElementById(`commentCount${id}`).textContent++;
-        input.value = '';
+      const botao = document.getElementById(`btnComentar${id}`);
+      botao.disabled = input.value.trim() === "";
+    }
+
+    function comentar(id) {
+      const input = document.getElementById(`comentarioInput${id}`);
+      const texto = input.value.trim();
+      if (texto !== "") {
+        const comentario = { usuario: usuarioLogado, texto };
+        const pub = publicacoes.find(p => p.id === id);
+        pub.comentarios.push(comentario);
+        renderizarPublicacoes();
       }
     }
+
+    function editarComentario(pubId, i) {
+      const span = document.getElementById(`comentarioTexto${pubId}_${i}`);
+      const novoTexto = prompt("Editar comentário:", span.textContent);
+      if (novoTexto !== null && novoTexto.trim() !== "") {
+        const pub = publicacoes.find(p => p.id === pubId);
+        pub.comentarios[i].texto = novoTexto.trim();
+        renderizarPublicacoes();
+      }
+    }
+
+    function excluirComentario(pubId, i) {
+      if (confirm("Tem certeza que deseja excluir este comentário?")) {
+        const pub = publicacoes.find(p => p.id === pubId);
+        pub.comentarios.splice(i, 1);
+        renderizarPublicacoes();
+      }
+    }
+
+    renderizarPublicacoes();
   </script>
 </body>
 </html>
