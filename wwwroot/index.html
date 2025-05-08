@@ -54,7 +54,13 @@
       </div>
 
       <div class="col-md-3 p-3 text-center">
-        <button class="btn btn-login" onclick="mostrarLogin()">Entrar</button>
+        <div id="areaLogin">
+          <button class="btn btn-login mb-2" onclick="mostrarLogin()">Entrar</button>
+          <button class="btn btn-secondary" onclick="mostrarCadastro()">Cadastrar</button>
+        </div>
+        <div class="d-none" id="areaLogout">
+          <button class="btn btn-danger mb-2" onclick="fazerLogout()">Sair</button>
+        </div>
       </div>
     </div>
   </div>
@@ -68,6 +74,7 @@
     Copyright - 2024
   </footer>
 
+  <!-- Modal Login -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog"><div class="modal-content">
       <div class="modal-header">
@@ -82,11 +89,27 @@
     </div></div>
   </div>
 
+  <!-- Modal Cadastro -->
+  <div class="modal fade" id="cadastroModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog"><div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cadastro</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="novoUsuario" class="form-control mb-2" placeholder="Novo Usuário">
+        <input type="password" id="novaSenha" class="form-control mb-3" placeholder="Nova Senha">
+        <button class="btn btn-success w-100" onclick="cadastrarUsuario()">Cadastrar</button>
+      </div>
+    </div></div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     let logado = false;
     let usuarioLogado = "";
     let interacao = {};
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
     const publicacoes = [
       { id: 1, titulo: "Título do prato 01", imagem: "img/publicacao/publicacao01.png", local: "Local 01", cidade: "Maceió-AL", likes: 2, dislikes: 1, comentarios: [ { usuario: "usuario_01", texto: "Muito saboroso!" } ] },
@@ -94,23 +117,66 @@
       { id: 3, titulo: "Título do prato 03", imagem: "img/publicacao/publicacao03.png", local: "Local 03", cidade: "Maceió-AL", likes: 2, dislikes: 1, comentarios: [ { usuario: "usuario_03", texto: "Uma explosão de sabor!" } ] }
     ];
 
+    const usuarioSalvo = localStorage.getItem("usuarioLogado");
+    if (usuarioSalvo) {
+      logado = true;
+      usuarioLogado = usuarioSalvo;
+      document.getElementById("nomeUsuario").textContent = usuarioLogado;
+      document.getElementById("imagemPerfil").src = "img/foto_usuario/usuario_01.jpg";
+      document.getElementById("areaLogin").classList.add("d-none");
+      document.getElementById("areaLogout").classList.remove("d-none");
+    }
+
     function mostrarLogin() {
       const modal = new bootstrap.Modal(document.getElementById("loginModal"));
+      modal.show();
+    }
+
+    function mostrarCadastro() {
+      const modal = new bootstrap.Modal(document.getElementById("cadastroModal"));
       modal.show();
     }
 
     function logarUsuario() {
       const usuario = document.getElementById("usuarioInput").value;
       const senha = document.getElementById("senhaInput").value;
-      if (usuario && senha) {
+      const valido = usuarios.find(u => u.nome === usuario && u.senha === senha);
+      if (valido) {
         logado = true;
         usuarioLogado = usuario;
-        const modal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
-        modal.hide();
-        document.getElementById("imagemPerfil").src = "img/foto_usuario/usuario_01.jpg";
+        localStorage.setItem("usuarioLogado", usuario);
         document.getElementById("nomeUsuario").textContent = usuario;
+        document.getElementById("imagemPerfil").src = "img/foto_usuario/usuario_01.jpg";
+        document.getElementById("areaLogin").classList.add("d-none");
+        document.getElementById("areaLogout").classList.remove("d-none");
+        bootstrap.Modal.getInstance(document.getElementById("loginModal")).hide();
         alert("Login realizado com sucesso!");
+        renderizarPublicacoes();
+      } else {
+        alert("Usuário ou senha inválidos.");
       }
+    }
+
+    function cadastrarUsuario() {
+      const nome = document.getElementById("novoUsuario").value;
+      const senha = document.getElementById("novaSenha").value;
+      if (!nome || !senha) return alert("Preencha todos os campos.");
+      if (usuarios.some(u => u.nome === nome)) return alert("Usuário já existe.");
+      usuarios.push({ nome, senha });
+      localStorage.setItem("usuarios", JSON.stringify(usuarios));
+      bootstrap.Modal.getInstance(document.getElementById("cadastroModal")).hide();
+      alert("Usuário cadastrado com sucesso!");
+    }
+
+    function fazerLogout() {
+      logado = false;
+      usuarioLogado = "";
+      localStorage.removeItem("usuarioLogado");
+      document.getElementById("nomeUsuario").textContent = "Sabor do Brasil";
+      document.getElementById("imagemPerfil").src = "img/logo/logo_sabor_do_brasil.png";
+      document.getElementById("areaLogin").classList.remove("d-none");
+      document.getElementById("areaLogout").classList.add("d-none");
+      renderizarPublicacoes();
     }
 
     function renderizarPublicacoes() {
@@ -123,9 +189,7 @@
           <div class="card-body p-2">
             <h5 class="fw-bold">${pub.titulo}</h5>
             <img src="${pub.imagem}" class="card-img-top mb-2" onclick="abrirComentarios(${pub.id})">
-            <p class="mb-1 d-flex justify-content-between">
-              <span>${pub.local}</span><span>${pub.cidade}</span>
-            </p>
+            <p class="mb-1 d-flex justify-content-between"><span>${pub.local}</span><span>${pub.cidade}</span></p>
             <div class="d-flex align-items-center gap-3 mb-2">
               <img id="likeIcon${pub.id}" src="img/icones/like_vazia.svg" class="icon" onclick="interagir('like', ${pub.id})">
               <span id="likeCount${pub.id}">${pub.likes}</span>
@@ -140,8 +204,8 @@
                   <strong>${c.usuario}:</strong> <span id="comentarioTexto${pub.id}_${i}">${c.texto}</span>
                   ${c.usuario === usuarioLogado ? `
                   <div class="acoes">
-                    <img src="img/icones/lapis_editar.svg" class="icon" style="color:white" onclick="editarComentario(${pub.id}, ${i})">
-                    <img src="img/icones/lixeira_deletar.svg" class="icon" style="color:red" onclick="excluirComentario(${pub.id}, ${i})">
+                    <img src="img/icones/lapis_editar.svg" class="icon" onclick="editarComentario(${pub.id}, ${i})">
+                    <img src="img/icones/lixeira_deletar.svg" class="icon" onclick="excluirComentario(${pub.id}, ${i})">
                   </div>` : ""}
                 </div>`).join('')}
               <textarea class="form-control mb-2" id="comentarioInput${pub.id}" oninput="habilitarBotao(${pub.id})" placeholder="Digite seu comentário"></textarea>
@@ -160,7 +224,6 @@
       const dislikeIcon = document.getElementById(`dislikeIcon${id}`);
       const totalLikes = document.getElementById('totalLikes');
       const totalDislikes = document.getElementById('totalDislikes');
-
       if (!interacao[id]) interacao[id] = null;
 
       if (tipo === 'like') {
