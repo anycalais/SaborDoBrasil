@@ -1,0 +1,34 @@
+/* Exemplo de cores personalizadas, ajuste conforme seu index.html */
+.bg-custom {
+    background-color: #fff8f0;
+}
+
+.bg-primary-custom {
+    background-color: #e17055 !important;
+}
+
+.btn-primary-custom {
+    background-color: #e17055;
+    border-color: #e17055;
+    color: #fff;
+    transition: background 0.2s;
+}
+
+.btn-primary-custom:hover {
+    background-color: #d35400;
+    border-color: #d35400;
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.card-header {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+.form-label {
+    color: #e17055;
+    font-weight: 500;
+}

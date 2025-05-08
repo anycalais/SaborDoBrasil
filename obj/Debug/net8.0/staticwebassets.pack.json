@@ -1,6 +1,14 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\cadastro.html",
+      "PackagePath": "staticwebassets\\cadastro.html"
+    },
+    {
+      "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\css\\style.css",
+      "PackagePath": "staticwebassets\\css\\style.css"
+    },
+    {
       "Id": "C:\\Users\\Alunos\\OneDrive\\Documents\\kauany\\SaborDoBrasil\\wwwroot\\img\\Telas_SPA\\index.png",
       "PackagePath": "staticwebassets\\img\\Telas_SPA\\index.png"
     },
