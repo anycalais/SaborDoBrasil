@@ -33,6 +33,10 @@
     .comentario-usuario .acoes img {
       margin-left: 5px;
     }
+    /* Destaca o input inválido com borda vermelha */
+    .is-invalid {
+      border: 2px solid #dc3545 !important;
+    }
   </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -76,17 +80,32 @@
 
   <!-- Modal Login -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog"><div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Login</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="usuarioInput" class="form-control mb-2" placeholder="Usuário">
+          <input type="password" id="senhaInput" class="form-control mb-3" placeholder="Senha">
+          <div class="d-flex gap-2">
+            <button
+              class="btn"
+              style="border: 2px solid #D97014; color: #D97014; background: transparent; font-weight: bold;"
+              data-bs-dismiss="modal"
+              type="button"
+            >Cancelar</button>
+            <button
+              class="btn btn-primary w-100"
+              style="background-color: #D97014; border: none; font-weight: bold;"
+              onclick="logarUsuario()"
+              type="button"
+            >Entrar</button>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <input type="text" id="usuarioInput" class="form-control mb-2" placeholder="Usuário">
-        <input type="password" id="senhaInput" class="form-control mb-3" placeholder="Senha">
-        <button class="btn btn-primary w-100" onclick="logarUsuario()">Entrar</button>
-      </div>
-    </div></div>
+    </div>
   </div>
 
   <!-- Modal Cadastro -->
@@ -111,11 +130,17 @@
     let interacao = {};
     const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-    const publicacoes = [
+    // Carrega publicações do localStorage ou usa padrão
+    const publicacoes = JSON.parse(localStorage.getItem("publicacoes")) || [
       { id: 1, titulo: "Título do prato 01", imagem: "img/publicacao/publicacao01.png", local: "Local 01", cidade: "Maceió-AL", likes: 2, dislikes: 1, comentarios: [ { usuario: "usuario_01", texto: "Muito saboroso!" } ] },
       { id: 2, titulo: "Título do prato 02", imagem: "img/publicacao/publicacao02.png", local: "Local 02", cidade: "Maceió-AL", likes: 1, dislikes: 0, comentarios: [ { usuario: "usuario_02", texto: "Delícia!" } ] },
       { id: 3, titulo: "Título do prato 03", imagem: "img/publicacao/publicacao03.png", local: "Local 03", cidade: "Maceió-AL", likes: 2, dislikes: 1, comentarios: [ { usuario: "usuario_03", texto: "Uma explosão de sabor!" } ] }
     ];
+
+    // Salva publicações no localStorage sempre que houver alteração
+    function salvarPublicacoes() {
+      localStorage.setItem("publicacoes", JSON.stringify(publicacoes));
+    }
 
     const usuarioSalvo = localStorage.getItem("usuarioLogado");
     if (usuarioSalvo) {
@@ -138,21 +163,38 @@
     }
 
     function logarUsuario() {
-      const usuario = document.getElementById("usuarioInput").value;
-      const senha = document.getElementById("senhaInput").value;
+      const usuarioInput = document.getElementById("usuarioInput");
+      const senhaInput = document.getElementById("senhaInput");
+      const usuario = usuarioInput.value.trim();
+      const senha = senhaInput.value;
+
+      // Remove classes de erro antes de validar novamente
+      usuarioInput.classList.remove("is-invalid");
+      senhaInput.classList.remove("is-invalid");
+
       const valido = usuarios.find(u => u.nome === usuario && u.senha === senha);
+
+      if (!usuario || !senha) {
+        if (!usuario) usuarioInput.classList.add("is-invalid");
+        if (!senha) senhaInput.classList.add("is-invalid");
+        return;
+      }
+
       if (valido) {
         logado = true;
         usuarioLogado = usuario;
         localStorage.setItem("usuarioLogado", usuario);
         document.getElementById("nomeUsuario").textContent = usuario;
-        document.getElementById("imagemPerfil").src = "img/foto_usuario/usuario_01.jpg";
+        document.getElementById("imagemPerfil").src = "#";
         document.getElementById("areaLogin").classList.add("d-none");
         document.getElementById("areaLogout").classList.remove("d-none");
         bootstrap.Modal.getInstance(document.getElementById("loginModal")).hide();
         alert("Login realizado com sucesso!");
         renderizarPublicacoes();
       } else {
+        // Destaca os campos inválidos
+        usuarioInput.classList.add("is-invalid");
+        senhaInput.classList.add("is-invalid");
         alert("Usuário ou senha inválidos.");
       }
     }
@@ -282,6 +324,7 @@
         const comentario = { usuario: usuarioLogado, texto };
         const pub = publicacoes.find(p => p.id === id);
         pub.comentarios.push(comentario);
+        salvarPublicacoes(); // Salva após comentar
         renderizarPublicacoes();
       }
     }
@@ -292,6 +335,7 @@
       if (novoTexto !== null && novoTexto.trim() !== "") {
         const pub = publicacoes.find(p => p.id === pubId);
         pub.comentarios[i].texto = novoTexto.trim();
+        salvarPublicacoes(); // Salva após editar
         renderizarPublicacoes();
       }
     }
@@ -300,6 +344,7 @@
       if (confirm("Tem certeza que deseja excluir este comentário?")) {
         const pub = publicacoes.find(p => p.id === pubId);
         pub.comentarios.splice(i, 1);
+        salvarPublicacoes(); // Salva após excluir
         renderizarPublicacoes();
       }
     }
