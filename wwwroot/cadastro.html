@@ -60,7 +60,7 @@
         </div>
     </div>
     <script>
-    document.getElementById('formCadastro').addEventListener('submit', function(e) {
+    document.getElementById('formCadastro').addEventListener('submit', async function(e) {
         e.preventDefault();
 
         // Coleta os dados do formulário
@@ -77,17 +77,22 @@
             return;
         }
 
-        // Salva o usuário no localStorage
-        const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-        if (usuarios.some(u => u.nome === nome)) {
-            alert('Usuário já existe!');
-            return;
-        }
-        usuarios.push({ nome, sobrenome, email, telefone, whatsapp, senha });
-        localStorage.setItem('usuarios', JSON.stringify(usuarios));
+        // Monta o objeto para enviar
+        const usuario = { nome, sobrenome, email, telefone, whatsapp, senha };
 
-        alert('Cadastro realizado com sucesso! Faça login para comentar.');
-        window.location.href = 'index.html';
+        // Envia para a API
+        const resposta = await fetch('/api/usuarios', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(usuario)
+        });
+
+        if (resposta.ok) {
+            alert('Cadastro realizado com sucesso! Faça login para comentar.');
+            window.location.href = 'index.html';
+        } else {
+            alert('Erro ao cadastrar usuário!');
+        }
     });
     </script>
 </body>
